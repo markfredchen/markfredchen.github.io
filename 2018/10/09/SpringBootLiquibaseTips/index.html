@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Spring Boot中使用Liquibase最佳实践 | Markfred Chen</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="spring-boot,liquibase" />
+    
+    <meta name="description" content="背景Liquibase问题随着项目的发展，一个项目中的代码量会非常庞大，同时数据库表也会错综复杂。如果一个项目使用了Liquibase对数据库结构进行管理，越来越多的问题会浮现出来。  ChangeSet文件同时多人在修改，自己的ChangeSet被改掉，甚至被删除掉。 开发人员将ChangeSet添加到已经执行过的文件中，导致执行顺序出问题。 开发人员擅自添加对业务数据的修改，其它环境无法执行并">
+<meta name="keywords" content="spring-boot,liquibase">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot中使用Liquibase最佳实践">
+<meta property="og:url" content="https://markfredchen.github.io/2018/10/09/SpringBootLiquibaseTips/index.html">
+<meta property="og:site_name" content="Markfred Chen">
+<meta property="og:description" content="背景Liquibase问题随着项目的发展，一个项目中的代码量会非常庞大，同时数据库表也会错综复杂。如果一个项目使用了Liquibase对数据库结构进行管理，越来越多的问题会浮现出来。  ChangeSet文件同时多人在修改，自己的ChangeSet被改掉，甚至被删除掉。 开发人员将ChangeSet添加到已经执行过的文件中，导致执行顺序出问题。 开发人员擅自添加对业务数据的修改，其它环境无法执行并">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20181009001-spring-boot-liquibase.png">
+<meta property="og:updated_time" content="2018-10-10T08:18:37.919Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot中使用Liquibase最佳实践">
+<meta name="twitter:description" content="背景Liquibase问题随着项目的发展，一个项目中的代码量会非常庞大，同时数据库表也会错综复杂。如果一个项目使用了Liquibase对数据库结构进行管理，越来越多的问题会浮现出来。  ChangeSet文件同时多人在修改，自己的ChangeSet被改掉，甚至被删除掉。 开发人员将ChangeSet添加到已经执行过的文件中，导致执行顺序出问题。 开发人员擅自添加对业务数据的修改，其它环境无法执行并">
+<meta name="twitter:image" content="http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20181009001-spring-boot-liquibase.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">Keep Searching Sparkle of Life</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/后端技术/">后端技术</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/aboutme">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-SpringBootLiquibaseTips" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Spring Boot中使用Liquibase最佳实践
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/10/09/SpringBootLiquibaseTips/" class="article-date">
+            <time datetime="2018-10-09T09:45:43.000Z" itemprop="datePublished">2018-10-09</time>
+        </a>
+    </div>
+
+		
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/liquibase/">liquibase</a>, <a class="tag-link" href="/tags/spring-boot/">spring-boot</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h2 id="Liquibase问题"><a href="#Liquibase问题" class="headerlink" title="Liquibase问题"></a>Liquibase问题</h2><p>随着项目的发展，一个项目中的代码量会非常庞大，同时数据库表也会错综复杂。如果一个项目使用了Liquibase对数据库结构进行管理，越来越多的问题会浮现出来。</p>
+<ol>
+<li>ChangeSet文件同时多人在修改，自己的ChangeSet被改掉，甚至被删除掉。</li>
+<li>开发人员将ChangeSet添加到已经执行过的文件中，导致执行顺序出问题。</li>
+<li>开发人员擅自添加对业务数据的修改，其它环境无法执行并报错。</li>
+<li>ChangeSet中SQL包含schema名称，导致其它环境schema名称变化时，ChangeSet报错。</li>
+<li>开发人员不小心改动了已经执行过的ChangeSet，在启动时会报错。</li>
+</ol>
+<h2 id="Liquibase基本规范"><a href="#Liquibase基本规范" class="headerlink" title="Liquibase基本规范"></a>Liquibase基本规范</h2><ol>
+<li>ChangeSet id使用[任务ID]-[日期]-[序号]，如 T100-20181009-001</li>
+<li>ChangeSet必须填写author</li>
+<li>Liquibase禁止对业务数据进行sql操作</li>
+<li>使用<code>&lt;sql&gt;</code>时，禁止包含schema名称</li>
+<li>Liquibase禁止使用存储过程</li>
+<li>所有表，列要加remarks进行注释</li>
+<li>已经执行过的ChangeSet严禁修改。</li>
+<li>不要随便升级项目liquibase版本，特别是大版本升级。不同版本ChangeSet MD5SUM的算法不一样。</li>
+</ol>
+<p>其它数据库规范不再赘述。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">databaseChangeLog</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xmlns</span>=<span class="string">"http://www.liquibase.org/xml/ns/dbchangelog"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">changeSet</span> <span class="attr">id</span>=<span class="string">"T100-20181009-001"</span> <span class="attr">author</span>=<span class="string">"markfredchen"</span> &gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">createTable</span> <span class="attr">tableName</span>=<span class="string">"demo_user"</span> <span class="attr">remarks</span>=<span class="string">"用户表"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">column</span> <span class="attr">name</span>=<span class="string">"id"</span> <span class="attr">type</span>=<span class="string">"bigint"</span> <span class="attr">remarks</span>=<span class="string">"用户ID,主键"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">constraints</span> <span class="attr">nullable</span>=<span class="string">"false"</span> <span class="attr">primaryKey</span>=<span class="string">"true"</span> <span class="attr">primaryKeyName</span>=<span class="string">"pk_demo_user_id"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">column</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">column</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">type</span>=<span class="string">"varchar(100)"</span> <span class="attr">remarks</span>=<span class="string">"用户名"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">constraints</span> <span class="attr">nullable</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">column</span>&gt;</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">createTable</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">changeSet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">databaseChangeLog</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="有效文件管理"><a href="#有效文件管理" class="headerlink" title="有效文件管理"></a>有效文件管理</h2><p>使用Liquibase中提供<code>&lt;include file=&quot;xxx&quot;/&gt;</code>tag，可以将ChangeSet分布在不同文件中。同时<code>&lt;include/&gt;</code>支持多级引用。<br>基于此功能可以对项目中的ChangeSet进行有效管理。推荐使用以下规范进行管理。</p>
+<h3 id="根据发布进行管理"><a href="#根据发布进行管理" class="headerlink" title="根据发布进行管理"></a>根据发布进行管理</h3><ol>
+<li>每个发布新建一个文件夹，所有发布相关的ChangeSet文件以及数据初始化文件，均放在些文件夹中。</li>
+<li>每个发布新建一个master.xml。此master.xml中，include本次发布需要执行的ChangeSet文件</li>
+<li>根据开发小组独立ChangeSet文件(可选)</li>
+<li>根据功能独立ChangeSet文件。例如user.xml, company.xml<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">resources</span><br><span class="line">  |-liquibase</span><br><span class="line">    |-user</span><br><span class="line">    | |- master.xml</span><br><span class="line">    | |- release.1.0.0</span><br><span class="line">    | | |- release.xml</span><br><span class="line">    | | |- user.xml -- 用户相关表ChangeSet</span><br><span class="line">    | | |- user.csv -- 用户初始化数据</span><br><span class="line">    | | |- company.xml -- 公司相关表ChangeSet</span><br><span class="line">    | |- release.1.1.0</span><br><span class="line">    | | |- release.xml</span><br><span class="line">    | | |- ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="模块化管理"><a href="#模块化管理" class="headerlink" title="模块化管理"></a>模块化管理</h2><p>当项目变得庞大之后，一个服务可能包含的功能模块会越来越多。此时大家会想尽办法进行模块拆分，逐步进行微服务化。然而在面对错综复杂的Liquibase ChangeSet就会无从下手。<br>针对这种将来可能会面对的问题，项目初期就对Liquibase进行模块化管理，将在未来带来很大收益。<br>首先说明一下Spring Boot中Liquibase默认是如何执行以及执行结果。</p>
+<ol>
+<li>在启动时，LiquibaseAutoConfiguration会根据默认配置初始化SpringLiquibase</li>
+<li>SpringLiquibase.afterPropertiesSet()中执行ChangeSet文件</li>
+<li>第一次跑ChangeSets的时候，会在数据库中自动创建两个表<code>databasechangelog</code>和<code>databasechangeloglock</code></li>
+</ol>
+<p>因此我们可以认为一个SpringLiquibase执行为一个模块。</p>
+<p>引入多模块管理时，基于上节文件管理规范，我们基于模块管理再做下调整。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">resources</span><br><span class="line">  |-liquibase</span><br><span class="line">    |-user</span><br><span class="line">    | |- master.xml</span><br><span class="line">    | |- release.1.0.0</span><br><span class="line">    | | |- release.xml</span><br><span class="line">    | | |- user.xml -- 用户相关表ChangeSet</span><br><span class="line">    | | |- user.csv -- 用户初始化数据</span><br><span class="line">    | | |- company.xml -- 公司相关表ChangeSet</span><br><span class="line">    | |- release.1.1.0</span><br><span class="line">    | | |- release.xml</span><br><span class="line">    | | |- ...</span><br><span class="line">    |- order</span><br><span class="line">    | |- master.xml</span><br><span class="line">    | |- release.1.0.0</span><br><span class="line">    | | |- ...</span><br></pre></td></tr></table></figure></p>
+<p>当有一天我们需要把订单模块拆分成独立服务时，我们只需要将模块相关的ChangeSet文件迁出来。即可完成数据结构的拆分。</p>
+<p>那如何在一个Spring Boot运行多个SpringLiquibase呢？需要对代码进行以下调整。</p>
+<ol>
+<li>禁用Spring Boot自动运行Liquibase。<br>当以下配置被启用时，Spring Boot AutoConfigure会使用默认配置初始化名为springLiquibase的Bean。然后我们不对其进行配置，Spring Boot启动时会报错。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># application.properties</span><br><span class="line"># spring boot 2以上</span><br><span class="line">spring.liquibase.enabled=false</span><br><span class="line"># spring boot 2以下</span><br><span class="line">liquibase.enabled=false</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Spring Boot配置Liquibase Bean</li>
+</ol>
+<p>配置两个SpringLiquibase Bean，Bean名称分别为userLiquibase和orderLiqubase。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">LiquibaseConfiguration</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  用户模块Liquibase   </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpringLiquibase <span class="title">userLiquibase</span><span class="params">(DataSource dataSource)</span> </span>&#123;</span><br><span class="line">        SpringLiquibase liquibase = <span class="keyword">new</span> SpringLiquibase();</span><br><span class="line">        <span class="comment">// 用户模块Liquibase文件路径</span></span><br><span class="line">        liquibase.setChangeLog(<span class="string">"classpath:liquibase/user/master.xml"</span>);</span><br><span class="line">        liquibase.setDataSource(dataSource);</span><br><span class="line">        liquibase.setShouldRun(<span class="keyword">true</span>);</span><br><span class="line">        liquibase.setResourceLoader(<span class="keyword">new</span> DefaultResourceLoader());</span><br><span class="line">        <span class="comment">// 覆盖Liquibase changelog表名</span></span><br><span class="line">        liquibase.setDatabaseChangeLogTable(<span class="string">"user_changelog_table"</span>);</span><br><span class="line">        liquibase.setDatabaseChangeLogLockTable(<span class="string">"user_changelog_lock_table"</span>);</span><br><span class="line">        <span class="keyword">return</span> liquibase;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  订单模块Liquibase   </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpringLiquibase <span class="title">orderLiquibase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      SpringLiquibase liquibase = <span class="keyword">new</span> SpringLiquibase();</span><br><span class="line">      liquibase.setChangeLog(<span class="string">"classpath:liquibase/order/master.xml"</span>);</span><br><span class="line">      liquibase.setDataSource(dataSource);</span><br><span class="line">      liquibase.setShouldRun(<span class="keyword">true</span>);</span><br><span class="line">      liquibase.setResourceLoader(<span class="keyword">new</span> DefaultResourceLoader());</span><br><span class="line">      liquibase.setDatabaseChangeLogTable(<span class="string">"order_changelog_table"</span>);</span><br><span class="line">      liquibase.setDatabaseChangeLogLockTable(<span class="string">"order_changelog_lock_table"</span>);</span><br><span class="line">      <span class="keyword">return</span> liquibase;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Cheers~~</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="valine-thread"></div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="linkedin" href="https://www.linkedin.com/in/markfred-chen-1aa45211/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-linkedin"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/markfredchen" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="https://weibo.com/markfredchen" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="wechat" href="/markfredchen" target="_blank" rel="noopener">
+                        <i class="icon fa fa-wechat"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/09/SpringBootLiquibaseTips/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20181009001-spring-boot-liquibase.png)" alt="Spring Boot中使用Liquibase最佳实践" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a></p>
+                            <p class="item-title"><a href="/2018/10/09/SpringBootLiquibaseTips/" class="title">Spring Boot中使用Liquibase最佳实践</a></p>
+                            <p class="item-date"><time datetime="2018-10-09T09:45:43.000Z" itemprop="datePublished">2018-10-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/后端技术/">后端技术</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/liquibase/">liquibase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/liquibase/" style="font-size: 10px;">liquibase</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring-boot</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2018 Markfred Chen</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+    
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <script>
+        new Valine({
+            el: '#valine-thread' ,
+            notify:false,
+            verify:false,
+            app_id: 'DdvoBisyeriwuY5NhOmU21D0-gzGzoHsz',
+            app_key: 'Rj8Bfyk5iIP2UoPabPk42h1i',
+            placeholder: '说两句...',
+            pageSize: '10',
+            avatar: 'identicon',
+            avatar_cdn:  'https://gravatar.loli.net/avatar/'
+        });
+    </script>
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
