@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    
+
+    
+    <title>创建自定义Spring Boot Starter | Markfred Chen</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content>
+    
+    <meta name="description" content="摘要在大家使用Spring Boot进行开发的过程中，应该可以接触到Spring Boot提供的很多Starter。比如  spring-boot-starter-web spring-boot-starter-jdbc …  Spring Boot AutoConfiguration原理Auto Configuration类在Spring Boot启动的过程中，会去找classpath:META">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建自定义Spring Boot Starter">
+<meta property="og:url" content="https://markfredchen.github.io/2018/10/10/create-custom-spring-boot-starter/index.html">
+<meta property="og:site_name" content="Markfred Chen">
+<meta property="og:description" content="摘要在大家使用Spring Boot进行开发的过程中，应该可以接触到Spring Boot提供的很多Starter。比如  spring-boot-starter-web spring-boot-starter-jdbc …  Spring Boot AutoConfiguration原理Auto Configuration类在Spring Boot启动的过程中，会去找classpath:META">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-boot.png">
+<meta property="og:updated_time" content="2019-11-27T10:45:07.453Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建自定义Spring Boot Starter">
+<meta name="twitter:description" content="摘要在大家使用Spring Boot进行开发的过程中，应该可以接触到Spring Boot提供的很多Starter。比如  spring-boot-starter-web spring-boot-starter-jdbc …  Spring Boot AutoConfiguration原理Auto Configuration类在Spring Boot启动的过程中，会去找classpath:META">
+<meta name="twitter:image" content="http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-boot.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">Keep Searching Sparkle of Life</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/后端技术/">后端技术</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/后端技术/Core-Java/">Core Java</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/后端技术/Spring-Security/">Spring Security</a></li></ul></li></ul>
+                                    
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-create-custom-spring-boot-starter" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        创建自定义Spring Boot Starter
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/10/10/create-custom-spring-boot-starter/" class="article-date">
+            <time datetime="2018-10-10T12:23:46.000Z" itemprop="datePublished">2018-10-10</time>
+        </a>
+    </div>
+
+		
+
+                
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在大家使用Spring Boot进行开发的过程中，应该可以接触到Spring Boot提供的很多Starter。比如</p>
+<ul>
+<li><code>spring-boot-starter-web</code></li>
+<li><code>spring-boot-starter-jdbc</code></li>
+<li>…</li>
+</ul>
+<h2 id="Spring-Boot-AutoConfiguration原理"><a href="#Spring-Boot-AutoConfiguration原理" class="headerlink" title="Spring Boot AutoConfiguration原理"></a>Spring Boot AutoConfiguration原理</h2><h3 id="Auto-Configuration类"><a href="#Auto-Configuration类" class="headerlink" title="Auto Configuration类"></a>Auto Configuration类</h3><p>在Spring Boot启动的过程中，会去找<code>classpath:META-INF/spring.factories</code>文件，来决定加载哪些AutoConfiguration类。<br>让我们看一下spring-boot-autoconfigure项目中的<code>spring.factories</code>文件。下面列出部分AutoConfiguration类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Auto Configure</span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.cloud.CloudAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.context.ConfigurationPropertiesAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,\</span><br><span class="line">org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>Spring Boot会尝试去运行所有<code>org.springframework.boot.autoconfigure.EnableAutoConfiguration</code>列出的AutoConfiguration类。此处大家可以会有疑问，很多我在项目里没有用到。对应组件是不是也会被初始化？答案是不会。我们用<code>RedisAutoConfiguration</code>为例来看一下背后发生了什么。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(RedisOperations<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">EnableConfigurationProperties</span>(<span class="title">RedisProperties</span>.<span class="title">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Import</span>(</span>&#123; LettuceConnectionConfiguration<span class="class">.<span class="keyword">class</span>, <span class="title">JedisConnectionConfiguration</span>.<span class="title">class</span> &#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">RedisAutoConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="meta">@ConditionalOnMissingBean</span>(name = <span class="string">"redisTemplate"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> RedisTemplate&lt;Object, Object&gt; <span class="title">redisTemplate</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">			RedisConnectionFactory redisConnectionFactory)</span> <span class="keyword">throws</span> UnknownHostException </span>&#123;</span><br><span class="line">		RedisTemplate&lt;Object, Object&gt; template = <span class="keyword">new</span> RedisTemplate&lt;&gt;();</span><br><span class="line">		template.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">		<span class="keyword">return</span> template;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="meta">@ConditionalOnMissingBean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> StringRedisTemplate <span class="title">stringRedisTemplate</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">			RedisConnectionFactory redisConnectionFactory)</span> <span class="keyword">throws</span> UnknownHostException </span>&#123;</span><br><span class="line">		StringRedisTemplate template = <span class="keyword">new</span> StringRedisTemplate();</span><br><span class="line">		template.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">		<span class="keyword">return</span> template;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Line 1: <code>@Configuration</code>定义Configuration组件</li>
+<li>Line 2: <code>@ConditionalOnClass(RedisOperations.class)</code> 在classpath中如果有<code>RedisOperation</code>类，则会运行此AutoConfiguration。反之则不会运行。</li>
+<li>Line 8: <code>@ConditionalOnMissingBean(name = &quot;redisTemplate&quot;)</code> 如果在Spring容器中没有名为<code>redisTemplate</code>的Bean被注册，则执行redisTemplate()方法。反之则不会执行。</li>
+</ul>
+<p>注：Spring Boot提供了一系列@Condition选择，同时还可以实现自定义Condition。参考<a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-condition-annotations" target="_blank" rel="noopener">Spring Boot - Condition Annotations</a></p>
+<h3 id="AutoConfiguration-Hints"><a href="#AutoConfiguration-Hints" class="headerlink" title="AutoConfiguration Hints"></a>AutoConfiguration Hints</h3><p>AutoConfiguration Hints功能主要便于开发人员在做配置时，IDE可以提示auto complete。如下截图：<br><img src="https://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-boot-custom-starter-configuration-metadata.png" alt="auto-complete"><br>Auto Complete信息包括：</p>
+<ul>
+<li>配置名称</li>
+<li>配置描述</li>
+<li>配置默认值</li>
+</ul>
+<p>具体信息在<code>additional-spring-configuration-metadata.json</code>中定义</p>
+<h2 id="创建自定义Starter"><a href="#创建自定义Starter" class="headerlink" title="创建自定义Starter"></a>创建自定义Starter</h2><ol>
+<li><p>需要封装的Service类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FooService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String fooMessage;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String barMessage;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FooService</span><span class="params">(String fooMessage, String barMessage)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fooMessage = fooMessage;</span><br><span class="line">        <span class="keyword">this</span>.barMessage = barMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFooMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.fooMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getBarMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.barMessage;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AutoConfiguration类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> io.markfredchen.custom.starter.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ...;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@PropertySource</span>(<span class="string">"classpath:config/foo.properties"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FooAutoConfiguration</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;foo.fooMessage&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String fooMessage;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;foo.barMessage&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String barMessage;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConditionalOnMissingBean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> FooService <span class="title">fooService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FooService(fooMessage, barMessage);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>spring.factories</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">io.markfredchen.custom.starter.config.FooAutoConfiguration</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>默认配置<br>创建 <code>resources/config/foo.properties</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foo.fooMessage=Foo!</span><br><span class="line">foo.barMessage=Bar!</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用自定义Starter"><a href="#使用自定义Starter" class="headerlink" title="使用自定义Starter"></a>使用自定义Starter</h2><ol>
+<li>创建新项目</li>
+<li><p>SpringBootApplication</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FooApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(FooApplication<span class="class">.<span class="keyword">class</span>, <span class="title">args</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CommandLineRunner <span class="title">runner</span><span class="params">(<span class="keyword">final</span> FooService fooService)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> args -&gt; &#123;</span><br><span class="line">            System.out.println(fooService.getFooMessage());</span><br><span class="line">            System.out.println(fooService.getBarMessage());</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>pom.xml</code>添加以下依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.markfredchen<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>foo-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2018-10-11 11:28:55.457  INFO 23978 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</span><br><span class="line">2018-10-11 11:28:55.457  INFO 23978 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</span><br><span class="line">2018-10-11 11:28:55.548  INFO 23978 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup</span><br><span class="line">2018-10-11 11:28:55.586  INFO 23978 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path &apos;&apos;</span><br><span class="line">2018-10-11 11:28:55.590  INFO 23978 --- [           main] i.m.c.s.foo.application.FooApplication   : Started FooApplication in 1.725 seconds (JVM running for 2.44)</span><br><span class="line">Foo!</span><br><span class="line">Bar!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>覆盖默认配置<br>创建<code>resources/application.properties</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.barMessage=Updated Bar!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2018-10-11 11:28:55.457  INFO 23978 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</span><br><span class="line">2018-10-11 11:28:55.457  INFO 23978 --- [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</span><br><span class="line">2018-10-11 11:28:55.548  INFO 23978 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup</span><br><span class="line">2018-10-11 11:28:55.586  INFO 23978 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path &apos;&apos;</span><br><span class="line">2018-10-11 11:28:55.590  INFO 23978 --- [           main] i.m.c.s.foo.application.FooApplication   : Started FooApplication in 1.725 seconds (JVM running for 2.44)</span><br><span class="line">Foo!</span><br><span class="line">Updated Bar!</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AutoConfiguration Hints<br>创建<code>resources/META-INF/additional-spring-configuration-metadata.json</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;properties&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;foo.fooMessage&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;java.lang.String&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;Foo Message.&quot;,</span><br><span class="line">      &quot;defaultValue&quot;: &quot;Foo!&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;foo.barMessage&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;java.lang.String&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;Bar Message.&quot;,</span><br><span class="line">      &quot;defaultValue&quot;: &quot;Bar!&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>效果<br><img src="https://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-boot-custom-starter-auto-complete.png" alt="auto complete"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-condition-annotations" target="_blank" rel="noopener">Spring Boot - Condition Annotations</a></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了spring boot starter机制以及如何创建自定义的starter。starter的目标是对现在有项目进行有效封装，减少开发人员的重复工作。<br>完整源代码访问<a href="https://github.com/markfredchen/tutorials/tree/master/spring-boot-customer-starter" target="_blank" rel="noopener">GitHub</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="valine-thread"></div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="linkedin" href="https://www.linkedin.com/in/markfred-chen-1aa45211/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-linkedin"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/markfredchen" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="https://weibo.com/markfredchen" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="wechat" href="/markfredchen" target="_blank" rel="noopener">
+                        <i class="icon fa fa-wechat"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/10/11/spring-security-tutorial-1/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            从零开始Spring Security (一)
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/10/09/spring-boot-liquibase-tips/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">Spring Boot中使用Liquibase最佳实践</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2019/07/22/deep-dive-locale/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20190722001-locale.jpg)" alt="Locale深度解析" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/后端技术/Core-Java/">Core Java</a></p>
+                            <p class="item-title"><a href="/2019/07/22/deep-dive-locale/" class="title">Locale深度解析</a></p>
+                            <p class="item-date"><time datetime="2019-07-22T03:23:57.000Z" itemprop="datePublished">2019-07-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/11/spring-security-tutorial-1/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-security-logo.png)" alt="从零开始Spring Security (一)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/后端技术/Spring-Security/">Spring Security</a></p>
+                            <p class="item-title"><a href="/2018/10/11/spring-security-tutorial-1/" class="title">从零开始Spring Security (一)</a></p>
+                            <p class="item-date"><time datetime="2018-10-11T10:19:45.000Z" itemprop="datePublished">2018-10-11</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/10/create-custom-spring-boot-starter/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-boot.png)" alt="创建自定义Spring Boot Starter" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a></p>
+                            <p class="item-title"><a href="/2018/10/10/create-custom-spring-boot-starter/" class="title">创建自定义Spring Boot Starter</a></p>
+                            <p class="item-date"><time datetime="2018-10-10T12:23:46.000Z" itemprop="datePublished">2018-10-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/09/spring-boot-liquibase-tips/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20181009001-spring-boot-liquibase.png)" alt="Spring Boot中使用Liquibase最佳实践" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/后端技术/">后端技术</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a></p>
+                            <p class="item-title"><a href="/2018/10/09/spring-boot-liquibase-tips/" class="title">Spring Boot中使用Liquibase最佳实践</a></p>
+                            <p class="item-date"><time datetime="2018-10-09T09:45:43.000Z" itemprop="datePublished">2018-10-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/后端技术/">后端技术</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/后端技术/Core-Java/">Core Java</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端技术/Spring-Boot/">Spring Boot</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端技术/Spring-Security/">Spring Security</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/core-java-spring-boot/">core-java spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/liquibase/">liquibase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot-spring-security/">spring-boot spring-security</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/core-java-spring-boot/" style="font-size: 10px;">core-java spring-boot</a> <a href="/tags/liquibase/" style="font-size: 10px;">liquibase</a> <a href="/tags/spring-boot/" style="font-size: 10px;">spring-boot</a> <a href="/tags/spring-boot-spring-security/" style="font-size: 10px;">spring-boot spring-security</a>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2019 Markfred Chen</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+    
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <script>
+        new Valine({
+            el: '#valine-thread' ,
+            notify:false,
+            verify:false,
+            app_id: 'DdvoBisyeriwuY5NhOmU21D0-gzGzoHsz',
+            app_key: 'Rj8Bfyk5iIP2UoPabPk42h1i',
+            placeholder: '说两句...',
+            pageSize: '10',
+            avatar: 'identicon',
+            avatar_cdn:  'https://gravatar.loli.net/avatar/'
+        });
+    </script>
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
