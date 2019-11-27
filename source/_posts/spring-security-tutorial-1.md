@@ -202,3 +202,5 @@ class DemoRestController {
 ➜  ~ curl http://localhost:8080/api/public/api
 this is public API
 ```
+
+Cheers~
