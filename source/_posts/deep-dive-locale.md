@@ -6,6 +6,7 @@ categories:
 - 后端技术
 - Core Java
 thumbnail: https://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20190722001-locale.jpg
+description: Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。
 ---
 # 摘要
 Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。

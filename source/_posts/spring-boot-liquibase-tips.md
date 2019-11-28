@@ -8,6 +8,7 @@ categories:
 - 后端技术
 - Spring Boot
 thumbnail: http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/20181009001-spring-boot-liquibase.png
+description: Liquibase作为快速开发工具，没有很好的规范。项目大了之后，可就苦了。
 ---
 ## 背景
 

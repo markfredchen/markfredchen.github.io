@@ -6,6 +6,7 @@ categories:
 - 后端技术
 - Spring Security
 thumbnail: https://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-security-logo.png
+description: 本文将一步步从零开始，搭建并讨论Spring Security原理
 ---
 # 摘要
 本文将一步步从零开始，搭建并讨论Spring Security原理

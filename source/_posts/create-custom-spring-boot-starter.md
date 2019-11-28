@@ -6,6 +6,7 @@ categories:
 - 后端技术
 - Spring Boot
 thumbnail: http://markfredchen-blog.oss-cn-shanghai.aliyuncs.com/blog/blog-spring-boot.png
+description: Java架构师实用工具。带你看看Spring Boot Starter怎么玩的。
 ---
 ## 摘要
 在大家使用Spring Boot进行开发的过程中，应该可以接触到Spring Boot提供的很多Starter。比如
