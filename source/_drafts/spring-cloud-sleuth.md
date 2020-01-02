@@ -31,3 +31,12 @@ public class ZipkinBarServiceApplication {
     }
 }
 ```
+org.opentest4j.AssertionFailedError: expected: tech.markfredchen.persistence.mybatis.plus.entity.User@74b8df0e
+<User(id=1202802937379553281, username=update_user, phone=test_phone, isEnabled=true, isDeleted=false, createdDate=2019-12-06T12:12:21.928+08:00[Asia/Shanghai])> 
+<User(id=1202802937379553281, username=update_user, phone=test_phone, isEnabled=true, isDeleted=false, createdDate=2019-12-06T12:12:21.928+08:00[Asia/Shanghai])>
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+	at org.junit.jupiter.api.AssertSame.failNotSame(AssertSame.java:48)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:37)
+	at org.junit.jupiter.api.AssertSame.assertSame(AssertSame.java:32)
+	at org.junit.jupiter.api.Assertions.assertSame(Assertions.java:2779)
+
