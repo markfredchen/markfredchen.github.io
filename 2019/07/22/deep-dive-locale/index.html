@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"markfredchen.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。">
+<meta name="keywords" content="core-java spring-boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Locale深度解析">
+<meta property="og:url" content="https://markfredchen.github.io/2019/07/22/deep-dive-locale/index.html">
+<meta property="og:site_name" content="Markfred Chen">
+<meta property="og:description" content="Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-09-12T12:09:44.203Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Locale深度解析">
+<meta name="twitter:description" content="Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。">
+
+<link rel="canonical" href="https://markfredchen.github.io/2019/07/22/deep-dive-locale/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Locale深度解析 | Markfred Chen</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Markfred Chen</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Keep Searching Sparkle of Life</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/markfredchen" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://markfredchen.github.io/2019/07/22/deep-dive-locale/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Markfred Chen">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Markfred Chen">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Locale深度解析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-22 11:23:57" itemprop="dateCreated datePublished" datetime="2019-07-22T11:23:57+08:00">2019-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-12 20:09:44" itemprop="dateModified" datetime="2021-09-12T20:09:44+08:00">2021-09-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后端技术/Core-Java/" itemprop="url" rel="index"><span itemprop="name">Core Java</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>Locale是日常开发中比较容易忽视的技术点。特别是开发一些只做国内市场，只有中文的项目时，Locale可能就直接被忽视了。而且在项目提出多语言支持的时候，因为没有很好的理解，可能给自己埋了很多坑。</p>
+<h1 id="什么是Locale"><a href="#什么是Locale" class="headerlink" title="什么是Locale"></a>什么是Locale</h1><p>其实<a href="https://docs.oracle.com/javase/10/docs/api/java/util/Locale.html" target="_blank" rel="noopener"><code>java.util.Locale</code></a>的Java Doc有很详细的解释，我就不过多解释。</p>
+<blockquote>
+<p>A Locale object represents a specific geographical, political, or cultural region. An operation that requires a Locale to perform its task is called locale-sensitive and uses the Locale to tailor information for the user. </p>
+</blockquote>
+<p>主要记住Locale实例包括以下信息就可以了。在多年的开发经验中，script和variant基本没有用到。就不过多介绍。</p>
+<ul>
+<li>language</li>
+<li>script</li>
+<li>country (region)</li>
+<li>variant</li>
+</ul>
+<h2 id="lanugage"><a href="#lanugage" class="headerlink" title="lanugage"></a>lanugage</h2><blockquote>
+<p>ISO 639 alpha-2 or alpha-3 language code</p>
+</blockquote>
+<p>在实际使用中，基本我们碰不到3位字母表示的语言。</p>
+<h2 id="country"><a href="#country" class="headerlink" title="country"></a>country</h2><blockquote>
+<p>ISO 3166 alpha-2 country code or UN M.49 numeric-3 area code.</p>
+</blockquote>
+<p>同样实际使用中，基本使用2位字母表示的国家</p>
+<h2 id="scirpt-和-variant"><a href="#scirpt-和-variant" class="headerlink" title="scirpt 和 variant"></a>scirpt 和 variant</h2><p><a href="https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" target="_blank" rel="noopener">IANA Language Subtag Registry</a> 定义了完整列表。<br>感觉script是地区的别称，variant是方言。了解一下就好。</p>
+<p>在实际使用中，大部分同学第一反应可能是会写出以下Locale。</p>
+<ul>
+<li>zh_CN</li>
+<li>en_US</li>
+<li>ja_JP</li>
+</ul>
+<p>如果你也是只想到这些，请打开你的浏览器-&gt;开发者工具-&gt;控制台中输入以下js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.navigator.language</span><br></pre></td></tr></table></figure></p>
+<p>浏览器为中文，你又在国内。输出结果就是zh-CN<br>然后如果重新你设置浏览器语言，比如设置成英文。再执行一下，输出结果是en-CN<br>What?? en-CN?? 这是什么鬼？ 首先通过这个Locale，我们可以知道country，是和你实际在哪个地区有关。<br>那该怎么处理？ 后面详细说怎么应用。</p>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>Locale的使用场景基本就是根据不同国家和语言，进行不同的显示。实际经验以下2点为主。</p>
+<ol>
+<li>多语言 (下文会详细说明)</li>
+<li>金额显示。</li>
+<li>日期格式显示。</li>
+</ol>
+<p>以金额显示为例，如果没有类似开发经验的话，你可以为会想，金额还有不同的格式。一般不都是 1,000,000.00。那你就错了。举两个例子。</p>
+<ol>
+<li>日语。日本人金额是不带小数点的。</li>
+<li>法语。法语中千位分隔符为空格，小数点为逗号。比如 1 000 000,00</li>
+</ol>
+<p>正确理解Locale，并正确使用可以写出既规范，又简练，质量又高的代码。而不是见招拆招，每个语言写一个自己的实现。</p>
+<h1 id="创建Locale-实例的正确姿势"><a href="#创建Locale-实例的正确姿势" class="headerlink" title="创建Locale 实例的正确姿势"></a>创建Locale 实例的正确姿势</h1><p><strong>使用正确的姿势创建非常重要，这在后面Spring里应用部分非常重要。</strong></p>
+<p>以下这段代码是我见过最多的创建方式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Locale locale = <span class="keyword">new</span> Locale(<span class="string">"zh_CN"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>其中zh_CN可能是前端直接传入，为了方便直接作为Locale构造方法参数。其实这是一个错误的用法。这样的使用，创建出来的Locale.language就是zh_cn。</p>
+<p>以下先列举一下两种正确姿势。然后比较一下结果</p>
+<ol>
+<li><p>Locale API</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用Locale构造方法</span></span><br><span class="line"><span class="comment">// 如果前端传入"zh_CN",此处需要自行解析并拆分</span></span><br><span class="line">Locale locale = <span class="keyword">new</span> Locale(<span class="string">"zh"</span>, <span class="string">"CN"</span>);</span><br><span class="line"><span class="comment">// 使用Locale预置常量。请自行查看Locale源代码。</span></span><br><span class="line">Locale locale = Locale.SIMPLIFIED_CHINESE</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Commons-Lang <code>LocaleUtils.toLocale()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Locale locale = LocaleUtils.toLocale(<span class="string">"zh_CN"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>以上三种创建方式，可以创建出一样的Locale object。<br>本人推荐使用Commons Lang3 <code>LocaleUtils.toLocale()</code></p>
+<p>下面我们的来对比一下错误和正解方式创建的Locale有什么区别。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocaleShowCase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        logLocale(<span class="keyword">new</span> Locale(<span class="string">"zh_CN"</span>));</span><br><span class="line">        logLocale(Locale.SIMPLIFIED_CHINESE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">logLocale</span><span class="params">(Locale locale)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"================================="</span>);</span><br><span class="line">        System.out.println(String.format(<span class="string">"Locale.toString: %s"</span>, locale.toString()));</span><br><span class="line">        System.out.println(String.format(<span class="string">"Language: %s"</span>, locale.getLanguage()));</span><br><span class="line">        System.out.println(String.format(<span class="string">"Country: %s"</span>, locale.getCountry()));</span><br><span class="line">        System.out.println(String.format(<span class="string">"LanguageTag: %s"</span>, locale.toLanguageTag()));</span><br><span class="line">        System.out.println(<span class="string">"================================="</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>输出结果</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">=================================</span><br><span class="line">Locale.toString: zh_cn</span><br><span class="line">Language: zh_cn</span><br><span class="line">Country: </span><br><span class="line">LanguageTag: und</span><br><span class="line">=================================</span><br><span class="line">=================================</span><br><span class="line">Locale.toString: zh_CN</span><br><span class="line">Language: zh</span><br><span class="line">Country: CN</span><br><span class="line">LanguageTag: zh-CN</span><br><span class="line">=================================</span><br></pre></td></tr></table></figure>
+<p>让我们来分析一下结果</p>
+<ol>
+<li>首先看一下数据。错误的创建方式，其实是把zh_CN作为language。Country和LanguageTag为空</li>
+<li>Language输出时均为小写</li>
+<li>Country输出时均为大写</li>
+<li>LanugageTag为Language和Country以”-“连接</li>
+<li>Locale.toString则是Language和Country以”_”连接</li>
+</ol>
+<h2 id="zh-CN-vs-zh-CN"><a href="#zh-CN-vs-zh-CN" class="headerlink" title="zh_CN vs zh-CN"></a>zh_CN vs zh-CN</h2><p>什么时候使用”_”，什么时候使用”-“，确实比较搞。<br>比如request.getLocale()中解析Locale时，可以同时处理两种格式。而Commons Lang3 LocaleUtils.toLocale()的入参只支持下划线格式。</p>
+<p><strong>不过我们可以定义这样的规范，在后端服务中只使用”_”格式，而前端只使用”-“格式。</strong></p>
+<h1 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h1><p>前端框架太多，就只说一下最近在玩的umi+dva+react。</p>
+<h2 id="UMI"><a href="#UMI" class="headerlink" title="UMI"></a>UMI</h2><h3 id="Locale处理"><a href="#Locale处理" class="headerlink" title="Locale处理"></a>Locale处理</h3><p>umi开发的项目中使用<code>umi-plugin-react/locale</code>来处理Locale。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; setLocale, getLocale &#125; <span class="keyword">from</span> <span class="string">'umi-plugin-react/locale'</span>;</span><br><span class="line"></span><br><span class="line">setLocale(language, <span class="literal">true</span>);</span><br><span class="line">getLocale();</span><br></pre></td></tr></table></figure></p>
+<h3 id="多语言"><a href="#多语言" class="headerlink" title="多语言"></a>多语言</h3><p><strong>资源文件使用”-“格式命名。</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">|-- en-US</span><br><span class="line">|   |-- common.ts</span><br><span class="line">|   `-- form.ts</span><br><span class="line">|-- ja-JP</span><br><span class="line">|   |-- common.ts</span><br><span class="line">|   `-- form.ts</span><br><span class="line">|-- zh-CN</span><br><span class="line">|   |-- common.ts</span><br><span class="line">|   `-- form.ts</span><br><span class="line">|-- en-US.ts</span><br><span class="line">|-- ja-JP.ts</span><br><span class="line">`-- zh-CN.ts</span><br></pre></td></tr></table></figure></p>
+<h2 id="显示多语言"><a href="#显示多语言" class="headerlink" title="显示多语言"></a>显示多语言</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; formatMessage &#125; <span class="keyword">from</span> <span class="string">'umi-plugin-react/locale'</span>;</span><br><span class="line">formatMessage(&#123;<span class="attr">id</span>: <span class="string">'xxx'</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="日期显示"><a href="#日期显示" class="headerlink" title="日期显示"></a>日期显示</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; formatDate &#125; <span class="keyword">from</span> <span class="string">'umi-plugin-react/locale'</span>;</span><br><span class="line">formatDate(<span class="keyword">new</span> <span class="built_in">Date</span>())；</span><br></pre></td></tr></table></figure>
+<h2 id="数字显示"><a href="#数字显示" class="headerlink" title="数字显示"></a>数字显示</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">formatNumber(<span class="number">10000000.00</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="后端服务"><a href="#后端服务" class="headerlink" title="后端服务"></a>后端服务</h1><p>这里只介绍基于Spring Boot开发的Stateless Rest API。SpringMVC已经过时，就不做介绍。</p>
+<h2 id="Locale处理-1"><a href="#Locale处理-1" class="headerlink" title="Locale处理"></a>Locale处理</h2><h3 id="如何确认当前API调用使用的Locale"><a href="#如何确认当前API调用使用的Locale" class="headerlink" title="如何确认当前API调用使用的Locale?"></a>如何确认当前API调用使用的Locale?</h3><p>Spring Boot使用LocaleResolver来确定当前API调用使用什么Locale。在LocaleResolver获取Locale之后，将Locale存入LocaleContextHolder中。</p>
+<p>Spring Boot提供了几个标准实现，主要区别是针对Locale存放的地方不一样提供对应获取方式</p>
+<ul>
+<li>AcceptHeaderLocaleResovler 从Request Header的Accept-Language中获取</li>
+<li>CookieLocaleResolver 从Cookie中获取</li>
+<li>FixedLocaleResolver 固定Locale，只使用系统配置的Locale</li>
+<li>SessionLocaleResolver 从Session中获取</li>
+</ul>
+<p>虽然Spring已经提供了多种获取LocaleResolver实现，但是在具体业务场景中会有更复杂的场景。比如需要根据当前登录用户的语言设置。这个时间就需要我们自己实现一套LocaleResovler。</p>
+<h3 id="多语言-1"><a href="#多语言-1" class="headerlink" title="多语言"></a>多语言</h3><h4 id="资源文件"><a href="#资源文件" class="headerlink" title="资源文件"></a>资源文件</h4><p>在Spring中，我们可以添加properties文件来做多语言支持。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">|-- java</span><br><span class="line">....</span><br><span class="line">`-- resources</span><br><span class="line">    `-- i18n</span><br><span class="line">        |-- messages.properties</span><br><span class="line">        |-- messages_ja.properties</span><br><span class="line">        |-- messages_ja_JP.properties</span><br><span class="line">        |-- messages_xx.properties</span><br><span class="line">        |-- messages_zh.properties</span><br><span class="line">        |-- messages_zh_CN.properties</span><br><span class="line">        |-- another.properties</span><br><span class="line">        |-- another_zh_CN.properties</span><br><span class="line">        |-- another_zh_TW.properties</span><br><span class="line">        |-- another_en.properties</span><br><span class="line">        `-- another_ja.properties</span><br></pre></td></tr></table></figure>
+<p>可以看到在例子</p>
+<ul>
+<li>有两组资源文件。一组为message，一组为anthor。在项目中可以这种方式进行模块化管理。</li>
+<li>每组资源文件可以有自己支持的locale列表</li>
+<li>每个文件定义对应locale的翻译</li>
+<li>没有locale资源文件为默认语言。如messages.properties, another.properties。当没有locale匹配时，使用默认资源文件内容。</li>
+<li>messages_xx.properties? 这是合法的。但建议使用，也基本不会碰到。这里是说明一下，框架是支持的。用new Locale(“xx”)可以创建language为xx的Locale。</li>
+</ul>
+<h4 id="Locale匹配优先级"><a href="#Locale匹配优先级" class="headerlink" title="Locale匹配优先级"></a>Locale匹配优先级</h4><p>language+country+variant &gt; language+country &gt; lanaguage </p>
+<p>以message*.properties为例：</p>
+<ul>
+<li>zh_CN -&gt; messages_zh_CN.properties</li>
+<li>zh或zh_JP -&gt; messages_zh.properties</li>
+<li>en_US -&gt; messages.properties.</li>
+</ul>
+<h4 id="配置MessageSource"><a href="#配置MessageSource" class="headerlink" title="配置MessageSource"></a>配置<code>MessageSource</code></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageConfiguration</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MessageSource <span class="title">messageSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ReloadableResourceBundleMessageSource messageSource = <span class="keyword">new</span> ReloadableResourceBundleMessageSource();</span><br><span class="line">        messageSource.setDefaultEncoding(<span class="string">"UTF-8"</span>);</span><br><span class="line">        messageSource.setBasenames(<span class="string">"classpath:i18n/messages"</span>, <span class="string">"classpath:i18n/another"</span>);</span><br><span class="line">        <span class="keyword">return</span> messageSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里注意<code>messageSource.setBasenames(&quot;classpath:i18n/messages&quot;, &quot;classpath:i18n/another&quot;)</code>BaseName就是资源文件的组名。</p>
+<h4 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XXXService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MessageSource messageSource;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">XXXService</span><span class="params">(MessageSource messageSource)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.messageSource = messageSource;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getI18N</span><span class="params">(String key, Object[] params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> messageSource.getMessage(key, params, LocaleContextHolder.getLocale())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="日期显示-1"><a href="#日期显示-1" class="headerlink" title="日期显示"></a>日期显示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DateFormat fullDF = DateFormat.getDateInstance(DateFormat.FULL, locale);</span><br><span class="line">System.out.println(fullDF.format(<span class="keyword">new</span> Date()));</span><br></pre></td></tr></table></figure>
+<h2 id="数字显示-1"><a href="#数字显示-1" class="headerlink" title="数字显示"></a>数字显示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(NumberFormat.getInstance(locale).format(<span class="number">10000000</span>));</span><br></pre></td></tr></table></figure>
+<h1 id="实际场景中的应用"><a href="#实际场景中的应用" class="headerlink" title="实际场景中的应用"></a>实际场景中的应用</h1><p>一般产品基本需要用户登录，在LocaleResovler中也提到。我们可以根据当前用户的语言设置作为使用Locale。这样比较好控制服务接收到的Locale。而且我们在开发时可以定义好系统支持的语言，比如支持zh_CN, en_US, ja_JP。这样在用户登录后的API调用就不用担心接收到不支持的Locale。而因为需要使用用户设置语言，我们需要自己实现一个LocaleResovler。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Principal</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String language;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomLocaleResolver</span> <span class="keyword">implements</span> <span class="title">LocaleResolver</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Locale defaultLocale;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomLocaleResolver</span><span class="params">(Locale defaultLocale)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.defaultLocale = defaultLocale;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Locale <span class="title">resolveLocale</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication();</span><br><span class="line">        <span class="keyword">if</span> (principal != <span class="keyword">null</span> &amp;&amp; !StringUtils.isEmpty(principal.getLanguage())) &#123;</span><br><span class="line">            <span class="keyword">return</span> LocaleUtils.toLocale(principal.getLanguage());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> request.getHeader(<span class="string">"Accept-Language"</span>) != <span class="keyword">null</span> ? request.getLocale() : <span class="keyword">this</span>.defaultLocale;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLocale</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Locale locale)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"Cannot change Principal data - use a different locale resolution strategy"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocaleConfiguration</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CustomLocaleResolver <span class="title">localeResolver</span><span class="params">(@Value(<span class="string">"$&#123;default-language:zh_CN&#125;"</span>)</span> String defaultLanguage) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CustomLocaleResolver(LocaleUtils.toLocale(defaultLanguage));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而用户没有登录之前，而前端不做任何处理时，后端会接收到类似en_CN的Locale，而无法匹配资源文件。如果按以下资源文件设计，给每个语言设置一个默认翻译，则可以解决接收到不规则Locale问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">|-- java</span><br><span class="line">....</span><br><span class="line">`-- resources</span><br><span class="line">    `-- i18n</span><br><span class="line">        |-- messages.properties</span><br><span class="line">        |-- messages_ja.properties</span><br><span class="line">        |-- messages_ja_JP.properties</span><br><span class="line">        |-- messages_en.properties</span><br><span class="line">        |-- messages_en_US.properties</span><br><span class="line">        |-- messages_en_GB.properties</span><br><span class="line">        |-- messages_zh.properties</span><br><span class="line">        |-- messages_zh_CN.properties</span><br><span class="line">        `-- messages_zh_TW.properties</span><br></pre></td></tr></table></figure>
+<p>这样的编排方式，不管你在什么国家。对于中文，英文，日文都有一个默认的匹配。</p>
+<p>Cheers~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/core-java-spring-boot/" rel="tag"># core-java spring-boot</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/10/11/spring-security-tutorial-1/" rel="prev" title="从零开始Spring Security (一)">
+      <i class="fa fa-chevron-left"></i> 从零开始Spring Security (一)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/05/idea-regex-tip/" rel="next" title="Idea使用正则表达式替换小技巧">
+      Idea使用正则表达式替换小技巧 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Locale"><span class="nav-number">2.</span> <span class="nav-text">什么是Locale</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lanugage"><span class="nav-number">2.1.</span> <span class="nav-text">lanugage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#country"><span class="nav-number">2.2.</span> <span class="nav-text">country</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scirpt-和-variant"><span class="nav-number">2.3.</span> <span class="nav-text">scirpt 和 variant</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用场景"><span class="nav-number">3.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建Locale-实例的正确姿势"><span class="nav-number">4.</span> <span class="nav-text">创建Locale 实例的正确姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#zh-CN-vs-zh-CN"><span class="nav-number">4.1.</span> <span class="nav-text">zh_CN vs zh-CN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前端"><span class="nav-number">5.</span> <span class="nav-text">前端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UMI"><span class="nav-number">5.1.</span> <span class="nav-text">UMI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Locale处理"><span class="nav-number">5.1.1.</span> <span class="nav-text">Locale处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多语言"><span class="nav-number">5.1.2.</span> <span class="nav-text">多语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示多语言"><span class="nav-number">5.2.</span> <span class="nav-text">显示多语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期显示"><span class="nav-number">5.3.</span> <span class="nav-text">日期显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数字显示"><span class="nav-number">5.4.</span> <span class="nav-text">数字显示</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后端服务"><span class="nav-number">6.</span> <span class="nav-text">后端服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Locale处理-1"><span class="nav-number">6.1.</span> <span class="nav-text">Locale处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何确认当前API调用使用的Locale"><span class="nav-number">6.1.1.</span> <span class="nav-text">如何确认当前API调用使用的Locale?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多语言-1"><span class="nav-number">6.1.2.</span> <span class="nav-text">多语言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#资源文件"><span class="nav-number">6.1.2.1.</span> <span class="nav-text">资源文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Locale匹配优先级"><span class="nav-number">6.1.2.2.</span> <span class="nav-text">Locale匹配优先级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置MessageSource"><span class="nav-number">6.1.2.3.</span> <span class="nav-text">配置MessageSource</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方式"><span class="nav-number">6.1.2.4.</span> <span class="nav-text">使用方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期显示-1"><span class="nav-number">6.2.</span> <span class="nav-text">日期显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数字显示-1"><span class="nav-number">6.3.</span> <span class="nav-text">数字显示</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实际场景中的应用"><span class="nav-number">7.</span> <span class="nav-text">实际场景中的应用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Markfred Chen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/markfredchen" title="GitHub → https://github.com/markfredchen" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:346120@qq.com" title="E-Mail → mailto:346120@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/markfredchen" title="Weibo → https://weibo.com/markfredchen" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/markfred.chen" title="Instagram → https://instagram.com/markfred.chen" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Markfred Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
