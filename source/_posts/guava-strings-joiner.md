@@ -6,7 +6,7 @@ categories:
 - 后端技术
 - Google Guava
 thumbnail:
-# description: 本文主要介绍Guava Joiner
+description: 本文主要介绍Guava Joiner
 ---
 # 概要
 Google Guava提供了如下几大类工具方法类。来简化对应代码逻辑。
@@ -81,7 +81,8 @@ public void testStringJoinerSkipNull() {
 public void testStringJoinerDefaultNullValue() {
     List<Integer> data = Arrays.asList(1,2,null,3);
     String actual = Joiner.on(",").useForNull("defaultValue");
-    assertEquals(actual, "1,2,defaultValue,3");
+    String expected = "1,2,defaultValue,3";
+    assertEquals(actual, exptected);
 }
 ```
 
@@ -91,11 +92,12 @@ public void testStringJoinerDefaultNullValue() {
 ```java
 @Test
 public void testMapJoiner() {
-    Joiner.MapJoiner joiner = Joiner.on(",").withKeyValueSeparator("=");
     Map<String, String> data = Maps.newHashMap();
     data.put("language", "Java");
     data.put("version", "1.8");
-    assertEquals(joiner.join(data), "language=Java,version=1.8");
+    String actual = Joiner.on(",").withKeyValueSeparator("=").join(data);
+    String expected = "language=Java,version=1.8";
+    assertEquals(actual, expected);
 }
 ```
 
