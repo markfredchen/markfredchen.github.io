@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -17,21 +17,21 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"markfredchen.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"markfredchen.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="本文主要介绍Guava Joiner">
-<meta name="keywords" content="guava">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Guava String笔记 (1) - Joiner">
 <meta property="og:url" content="https://markfredchen.github.io/2021/09/11/guava-strings-joiner/index.html">
 <meta property="og:site_name" content="Markfred Chen">
 <meta property="og:description" content="本文主要介绍Guava Joiner">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-09-12T12:09:44.205Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-11T12:28:32.000Z">
+<meta property="article:modified_time" content="2021-09-13T01:34:54.219Z">
+<meta property="article:author" content="Markfred Chen">
+<meta property="article:tag" content="guava">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Guava String笔记 (1) - Joiner">
-<meta name="twitter:description" content="本文主要介绍Guava Joiner">
 
 <link rel="canonical" href="https://markfredchen.github.io/2021/09/11/guava-strings-joiner/">
 
@@ -185,7 +185,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-12 20:09:44" itemprop="dateModified" datetime="2021-09-12T20:09:44+08:00">2021-09-12</time>
+                <time title="修改时间：2021-09-13 09:34:54" itemprop="dateModified" datetime="2021-09-13T09:34:54+08:00">2021-09-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -193,11 +193,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Google-Guava/" itemprop="url" rel="index"><span itemprop="name">Google Guava</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Google-Guava/" itemprop="url" rel="index"><span itemprop="name">Google Guava</span></a>
                 </span>
             </span>
 
@@ -223,17 +223,28 @@
 <li>Strings</li>
 </ul>
 <p>此系列笔记将从实际开发使用的角度，来看看Guava String工具类的优点。<br>本文先简介一下Guava Joiner。</p>
-<h1 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h1><p>项目添加Guava依赖。最新版本查看<a href="https://mvnrepository.com/artifact/com.google.guava/guava" target="_blank" rel="noopener">mvnrepository.com</a></p>
-<h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><p>pom.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.guava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>guava<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>30.1.1-jre<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h2><p>build.gradle<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">'com.google.guava:guava:30.1.1-jre'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h1><p>项目添加Guava依赖。最新版本查看<a target="_blank" rel="noopener" href="https://mvnrepository.com/artifact/com.google.guava/guava">mvnrepository.com</a></p>
+<h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><p>pom.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.guava<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>guava<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>30.1.1-jre<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h2><p>build.gradle</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&#x27;com.google.guava:guava:30.1.1-jre&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="Joiner"><a href="#Joiner" class="headerlink" title="Joiner"></a>Joiner</h1><p>其实Guava Joiner和String.join目标一样，把一个集合转换成一个字符串。<br>以下代码等价</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testStringJoin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; data = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>);</span><br><span class="line">    String guavaJoinerResult = Joiner.on(<span class="string">","</span>).join(data);</span><br><span class="line">    assertEquals(guavaJoinerResult, <span class="string">"1,2,null,3"</span>);</span><br><span class="line">    String stringJoinResult = String.join(<span class="string">","</span>, data);</span><br><span class="line">    assertEquals(stringJoinResult, <span class="string">"1,2,null,3"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testStringJoin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; data = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>);</span><br><span class="line">    String guavaJoinerResult = Joiner.on(<span class="string">&quot;,&quot;</span>).join(data);</span><br><span class="line">    assertEquals(guavaJoinerResult, <span class="string">&quot;1,2,null,3&quot;</span>);</span><br><span class="line">    String stringJoinResult = String.join(<span class="string">&quot;,&quot;</span>, data);</span><br><span class="line">    assertEquals(stringJoinResult, <span class="string">&quot;1,2,null,3&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>以下是Guava Joiner额外提供的工具方法。如果有以下需求，就要使用Guava Joiner。</p>
 <h2 id="null值处理"><a href="#null值处理" class="headerlink" title="null值处理"></a>null值处理</h2><p>null值处理有两种方式。一是跳过，二是给定默认值</p>
-<h3 id="null值跳过"><a href="#null值跳过" class="headerlink" title="null值跳过"></a>null值跳过</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testStringJoinerSkipNull</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; data = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>);</span><br><span class="line">    String actual = Joiner.on(<span class="string">","</span>).skipNulls();</span><br><span class="line">    assertEquals(actual, <span class="string">"1,2,3"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="null默认值"><a href="#null默认值" class="headerlink" title="null默认值"></a>null默认值</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testStringJoinerDefaultNullValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; data = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>);</span><br><span class="line">    String actual = Joiner.on(<span class="string">","</span>).useForNull(<span class="string">"defaultValue"</span>);</span><br><span class="line">    String expected = <span class="string">"1,2,defaultValue,3"</span>;</span><br><span class="line">    assertEquals(actual, exptected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="null值跳过"><a href="#null值跳过" class="headerlink" title="null值跳过"></a>null值跳过</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testStringJoinerSkipNull</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; data = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>);</span><br><span class="line">    String actual = Joiner.on(<span class="string">&quot;,&quot;</span>).skipNulls();</span><br><span class="line">    assertEquals(actual, <span class="string">&quot;1,2,3&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="null默认值"><a href="#null默认值" class="headerlink" title="null默认值"></a>null默认值</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testStringJoinerDefaultNullValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; data = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>);</span><br><span class="line">    String actual = Joiner.on(<span class="string">&quot;,&quot;</span>).useForNull(<span class="string">&quot;defaultValue&quot;</span>);</span><br><span class="line">    String expected = <span class="string">&quot;1,2,defaultValue,3&quot;</span>;</span><br><span class="line">    assertEquals(actual, exptected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="MapJoiner"><a href="#MapJoiner" class="headerlink" title="MapJoiner"></a>MapJoiner</h2><p>处理Map，输出连接字符串</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMapJoiner</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Map&lt;String, String&gt; data = Maps.newHashMap();</span><br><span class="line">    data.put(<span class="string">"language"</span>, <span class="string">"Java"</span>);</span><br><span class="line">    data.put(<span class="string">"version"</span>, <span class="string">"1.8"</span>);</span><br><span class="line">    String actual = Joiner.on(<span class="string">","</span>).withKeyValueSeparator(<span class="string">"="</span>).join(data);</span><br><span class="line">    String expected = <span class="string">"language=Java,version=1.8"</span>;</span><br><span class="line">    assertEquals(actual, expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMapJoiner</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Map&lt;String, String&gt; data = Maps.newHashMap();</span><br><span class="line">    data.put(<span class="string">&quot;language&quot;</span>, <span class="string">&quot;Java&quot;</span>);</span><br><span class="line">    data.put(<span class="string">&quot;version&quot;</span>, <span class="string">&quot;1.8&quot;</span>);</span><br><span class="line">    String actual = Joiner.on(<span class="string">&quot;,&quot;</span>).withKeyValueSeparator(<span class="string">&quot;=&quot;</span>).join(data);</span><br><span class="line">    String expected = <span class="string">&quot;language=Java,version=1.8&quot;</span>;</span><br><span class="line">    assertEquals(actual, expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Cheers~</p>
 
     </div>
@@ -318,7 +329,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前提条件"><span class="nav-number">2.</span> <span class="nav-text">前提条件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven"><span class="nav-number">2.1.</span> <span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle"><span class="nav-number">2.2.</span> <span class="nav-text">Gradle</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Joiner"><span class="nav-number">3.</span> <span class="nav-text">Joiner</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null值处理"><span class="nav-number">3.1.</span> <span class="nav-text">null值处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null值跳过"><span class="nav-number">3.1.1.</span> <span class="nav-text">null值跳过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null默认值"><span class="nav-number">3.1.2.</span> <span class="nav-text">null默认值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapJoiner"><span class="nav-number">3.2.</span> <span class="nav-text">MapJoiner</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%A6%81"><span class="nav-text">概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="nav-text">前提条件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven"><span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle"><span class="nav-text">Gradle</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Joiner"><span class="nav-text">Joiner</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null%E5%80%BC%E5%A4%84%E7%90%86"><span class="nav-text">null值处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null%E5%80%BC%E8%B7%B3%E8%BF%87"><span class="nav-text">null值跳过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-text">null默认值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapJoiner"><span class="nav-text">MapJoiner</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -341,23 +352,23 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/markfredchen" title="GitHub → https://github.com/markfredchen" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/markfredchen" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;markfredchen" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:346120@qq.com" title="E-Mail → mailto:346120@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:346120@qq.com" title="E-Mail → mailto:346120@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://weibo.com/markfredchen" title="Weibo → https://weibo.com/markfredchen" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+        <a href="https://weibo.com/markfredchen" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;markfredchen" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://instagram.com/markfred.chen" title="Instagram → https://instagram.com/markfred.chen" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+        <a href="https://instagram.com/markfred.chen" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;markfred.chen" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
       </span>
   </div>
 
@@ -388,7 +399,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Markfred Chen</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -408,9 +419,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/pisces.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -17,16 +17,16 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"markfredchen.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"markfredchen.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="Markfred Chen">
 <meta property="og:url" content="https://markfredchen.github.io/index.html">
 <meta property="og:site_name" content="Markfred Chen">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Markfred Chen">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Markfred Chen">
 
 <link rel="canonical" href="https://markfredchen.github.io/">
 
@@ -182,11 +182,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Google-Guava/" itemprop="url" rel="index"><span itemprop="name">Google Guava</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Google-Guava/" itemprop="url" rel="index"><span itemprop="name">Google Guava</span></a>
                 </span>
             </span>
 
@@ -215,10 +215,13 @@
 <p>请看如下示例，想一想结果应该是什么。<br><code>&quot;,a ,,b,&quot;.split(&quot;,&quot;)</code></p>
 <p>A. <code>&quot;&quot;, &quot;a &quot;, &quot;&quot;, &quot;b&quot;, &quot;&quot;</code><br>B. <code>null, &quot;a &quot;, null, &quot;b&quot;, null</code><br>C. <code>&quot;a &quot;, null, &quot;b&quot;</code><br>D. <code>&quot;a &quot;, &quot;b&quot;</code></p>
 <p>正确答案为<code>&quot;&quot;, &quot;a &quot;, &quot;&quot;, &quot;b&quot;</code>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testCoreJavaSplit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">",a ,,b,"</span>;</span><br><span class="line">    String[] actual = sampleData.split(<span class="string">","</span>);</span><br><span class="line">    String[] expected = <span class="keyword">new</span> String[]&#123;<span class="string">""</span>, <span class="string">"a "</span>, <span class="string">""</span>, <span class="string">"b"</span>&#125;;</span><br><span class="line">    <span class="comment">// assertJ</span></span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testCoreJavaSplit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">&quot;,a ,,b,&quot;</span>;</span><br><span class="line">    String[] actual = sampleData.split(<span class="string">&quot;,&quot;</span>);</span><br><span class="line">    String[] expected = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;&quot;</span>, <span class="string">&quot;a &quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;b&quot;</span>&#125;;</span><br><span class="line">    <span class="comment">// assertJ</span></span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>说实话，我在看Guava文档之前，认为A是对的。可以看出String.split方法会跳过结尾空字符串。<br>同时String.split()方法返回的是String[]，不实用。</p>
 <p>由此在实际开发过程中，我还是比较推荐使用Guava的Splitter</p>
-<p>如果使用Splitter来处理上面CoreJava split对应示例，则会得到答案A<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testGuavaSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">",a ,,b,"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">","</span>).splitToList(sampleDate);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">""</span>, <span class="string">"a "</span>, <span class="string">""</span>, <span class="string">"b"</span>, <span class="string">""</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果使用Splitter来处理上面CoreJava split对应示例，则会得到答案A</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testGuavaSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">&quot;,a ,,b,&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">&quot;,&quot;</span>).splitToList(sampleDate);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;&quot;</span>, <span class="string">&quot;a &quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="split方法"><a href="#split方法" class="headerlink" title="split方法"></a>split方法</h2><p>Guava Splitter提供了三个split方法，对不同返回类型。</p>
 <ol>
 <li><code>split(): Iterable&lt;String&gt;</code></li>
@@ -226,13 +229,19 @@
 <li><code>splitToStream(): Stream&lt;String&gt;</code></li>
 </ol>
 <p><code>Iterable&lt;String&gt;</code>在开发中使用做后续处理没有那么方便<br><code>List&lt;String&gt;</code>则相对容易处理，我比较推荐。后续示例也都用<code>splitToList()</code><br><code>Stream&lt;String&gt;</code>对应Lambda解决方案，是比较方便，但是由于<code>splitToStream</code>方法被标记为<code>@Beta</code>，所以现在来说，还是谨慎使用。</p>
-<h2 id="处理工具方法"><a href="#处理工具方法" class="headerlink" title="处理工具方法"></a>处理工具方法</h2><h3 id="跳过空字符串"><a href="#跳过空字符串" class="headerlink" title="跳过空字符串"></a>跳过空字符串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testGuavaSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">",a ,,b,"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">","</span>)</span><br><span class="line">            .omitEmptyStrings()</span><br><span class="line">            .splitToList(sampleDate);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">"a "</span>, <span class="string">"b"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Trim返回结果"><a href="#Trim返回结果" class="headerlink" title="Trim返回结果"></a>Trim返回结果</h3><h4 id="Trim空格"><a href="#Trim空格" class="headerlink" title="Trim空格"></a>Trim空格</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testGuavaSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">",a ,,b,"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">","</span>)</span><br><span class="line">            .omitEmptyStrings()</span><br><span class="line">            .trimResults()</span><br><span class="line">            .splitToList(sampleDate);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">"a"</span>, <span class="string">"b"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="使用CharMatcher去除其它字符"><a href="#使用CharMatcher去除其它字符" class="headerlink" title="使用CharMatcher去除其它字符"></a>使用CharMatcher去除其它字符</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterTrimResult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">"alpha!|beta:|gamma;|omega_1|_sigma_"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter</span><br><span class="line">            .on(<span class="string">"|"</span>)</span><br><span class="line">            .trimResults(CharMatcher.anyOf(<span class="string">"!:;_"</span>))</span><br><span class="line">            .splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">"alpha"</span>, <span class="string">"beta"</span>, <span class="string">"gamma"</span>, <span class="string">"omega_1"</span>, <span class="string">"sigma"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="限制分隔次数"><a href="#限制分隔次数" class="headerlink" title="限制分隔次数"></a>限制分隔次数</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterLimit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">"alpha|beta|gamma|omega|sigma"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">"|"</span>).limit(<span class="number">3</span>).splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">"alpha"</span>, <span class="string">"beta"</span>, <span class="string">"gamma|omega|sigma"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="根据特写字符长度进行分隔"><a href="#根据特写字符长度进行分隔" class="headerlink" title="根据特写字符长度进行分隔"></a>根据特写字符长度进行分隔</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterFixedLength</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">"001002003911"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.fixedLength(<span class="number">3</span>).splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">"001"</span>, <span class="string">"002"</span>, <span class="string">"003"</span>, <span class="string">"911"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="CharMatcher匹配多个分隔符"><a href="#CharMatcher匹配多个分隔符" class="headerlink" title="CharMatcher匹配多个分隔符"></a>CharMatcher匹配多个分隔符</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testCharMatcherSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">"alpha,beta;gamma_omega|sigma"</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(CharMatcher.anyOf(<span class="string">",;_|"</span>)).splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">"alpha"</span>, <span class="string">"beta"</span>, <span class="string">"gamma"</span>, <span class="string">"omega"</span>, <span class="string">"sigma"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Split返回Map"><a href="#Split返回Map" class="headerlink" title="Split返回Map"></a>Split返回Map</h2><p>此方法被标记为<code>@Beta</code>，生产谨慎使用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterToMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">"language=java|version=1.8"</span>;</span><br><span class="line">    Map&lt;String, String&gt; actual = Splitter</span><br><span class="line">            .on(<span class="string">"|"</span>)</span><br><span class="line">            .withKeyValueSeparator(<span class="string">"="</span>)</span><br><span class="line">            .split(data);</span><br><span class="line">    Map&lt;String, String&gt; expected = Maps.newHashMap();</span><br><span class="line">    expected.put(<span class="string">"language"</span>, <span class="string">"java"</span>);</span><br><span class="line">    expected.put(<span class="string">"version"</span>, <span class="string">"1.8"</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line"></span><br><span class="line">    actual = Splitter</span><br><span class="line">            .on(<span class="string">"|"</span>)</span><br><span class="line">            .withKeyValueSeparator(Splitter.on(<span class="string">"="</span>))</span><br><span class="line">            .split(data);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="处理工具方法"><a href="#处理工具方法" class="headerlink" title="处理工具方法"></a>处理工具方法</h2><h3 id="跳过空字符串"><a href="#跳过空字符串" class="headerlink" title="跳过空字符串"></a>跳过空字符串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testGuavaSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">&quot;,a ,,b,&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">&quot;,&quot;</span>)</span><br><span class="line">            .omitEmptyStrings()</span><br><span class="line">            .splitToList(sampleDate);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;a &quot;</span>, <span class="string">&quot;b&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Trim返回结果"><a href="#Trim返回结果" class="headerlink" title="Trim返回结果"></a>Trim返回结果</h3><h4 id="Trim空格"><a href="#Trim空格" class="headerlink" title="Trim空格"></a>Trim空格</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testGuavaSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String sampleDate = <span class="string">&quot;,a ,,b,&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">&quot;,&quot;</span>)</span><br><span class="line">            .omitEmptyStrings()</span><br><span class="line">            .trimResults()</span><br><span class="line">            .splitToList(sampleDate);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用CharMatcher去除其它字符"><a href="#使用CharMatcher去除其它字符" class="headerlink" title="使用CharMatcher去除其它字符"></a>使用CharMatcher去除其它字符</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterTrimResult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">&quot;alpha!|beta:|gamma;|omega_1|_sigma_&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter</span><br><span class="line">            .on(<span class="string">&quot;|&quot;</span>)</span><br><span class="line">            .trimResults(CharMatcher.anyOf(<span class="string">&quot;!:;_&quot;</span>))</span><br><span class="line">            .splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;alpha&quot;</span>, <span class="string">&quot;beta&quot;</span>, <span class="string">&quot;gamma&quot;</span>, <span class="string">&quot;omega_1&quot;</span>, <span class="string">&quot;sigma&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="限制分隔次数"><a href="#限制分隔次数" class="headerlink" title="限制分隔次数"></a>限制分隔次数</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterLimit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">&quot;alpha|beta|gamma|omega|sigma&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(<span class="string">&quot;|&quot;</span>).limit(<span class="number">3</span>).splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;alpha&quot;</span>, <span class="string">&quot;beta&quot;</span>, <span class="string">&quot;gamma|omega|sigma&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="根据特写字符长度进行分隔"><a href="#根据特写字符长度进行分隔" class="headerlink" title="根据特写字符长度进行分隔"></a>根据特写字符长度进行分隔</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterFixedLength</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">&quot;001002003911&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.fixedLength(<span class="number">3</span>).splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;001&quot;</span>, <span class="string">&quot;002&quot;</span>, <span class="string">&quot;003&quot;</span>, <span class="string">&quot;911&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CharMatcher匹配多个分隔符"><a href="#CharMatcher匹配多个分隔符" class="headerlink" title="CharMatcher匹配多个分隔符"></a>CharMatcher匹配多个分隔符</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testCharMatcherSplitter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">&quot;alpha,beta;gamma_omega|sigma&quot;</span>;</span><br><span class="line">    List&lt;String&gt; actual = Splitter.on(CharMatcher.anyOf(<span class="string">&quot;,;_|&quot;</span>)).splitToList(data);</span><br><span class="line">    List&lt;String&gt; expected = Arrays.asList(<span class="string">&quot;alpha&quot;</span>, <span class="string">&quot;beta&quot;</span>, <span class="string">&quot;gamma&quot;</span>, <span class="string">&quot;omega&quot;</span>, <span class="string">&quot;sigma&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Split返回Map"><a href="#Split返回Map" class="headerlink" title="Split返回Map"></a>Split返回Map</h2><p>此方法被标记为<code>@Beta</code>，生产谨慎使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">testSplitterToMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String data = <span class="string">&quot;language=java|version=1.8&quot;</span>;</span><br><span class="line">    Map&lt;String, String&gt; actual = Splitter</span><br><span class="line">            .on(<span class="string">&quot;|&quot;</span>)</span><br><span class="line">            .withKeyValueSeparator(<span class="string">&quot;=&quot;</span>)</span><br><span class="line">            .split(data);</span><br><span class="line">    Map&lt;String, String&gt; expected = Maps.newHashMap();</span><br><span class="line">    expected.put(<span class="string">&quot;language&quot;</span>, <span class="string">&quot;java&quot;</span>);</span><br><span class="line">    expected.put(<span class="string">&quot;version&quot;</span>, <span class="string">&quot;1.8&quot;</span>);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line"></span><br><span class="line">    actual = Splitter</span><br><span class="line">            .on(<span class="string">&quot;|&quot;</span>)</span><br><span class="line">            .withKeyValueSeparator(Splitter.on(<span class="string">&quot;=&quot;</span>))</span><br><span class="line">            .split(data);</span><br><span class="line">    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>大家根据实际场景进行使用</p>
 <p>Cheers~</p>
 
@@ -285,7 +294,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-12 20:09:44" itemprop="dateModified" datetime="2021-09-12T20:09:44+08:00">2021-09-12</time>
+                <time title="修改时间：2021-09-13 09:34:54" itemprop="dateModified" datetime="2021-09-13T09:34:54+08:00">2021-09-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -293,11 +302,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Google-Guava/" itemprop="url" rel="index"><span itemprop="name">Google Guava</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Google-Guava/" itemprop="url" rel="index"><span itemprop="name">Google Guava</span></a>
                 </span>
             </span>
 
@@ -459,11 +468,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Core-Java/" itemprop="url" rel="index"><span itemprop="name">Core Java</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Core-Java/" itemprop="url" rel="index"><span itemprop="name">Core Java</span></a>
                 </span>
             </span>
 
@@ -544,11 +553,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Spring-Security/" itemprop="url" rel="index"><span itemprop="name">Spring Security</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Spring-Security/" itemprop="url" rel="index"><span itemprop="name">Spring Security</span></a>
                 </span>
             </span>
 
@@ -629,11 +638,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Spring-Boot/" itemprop="url" rel="index"><span itemprop="name">Spring Boot</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Spring-Boot/" itemprop="url" rel="index"><span itemprop="name">Spring Boot</span></a>
                 </span>
             </span>
 
@@ -714,11 +723,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">后端技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/后端技术/Spring-Boot/" itemprop="url" rel="index"><span itemprop="name">Spring Boot</span></a>
+                  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/Spring-Boot/" itemprop="url" rel="index"><span itemprop="name">Spring Boot</span></a>
                 </span>
             </span>
 
@@ -831,23 +840,23 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/markfredchen" title="GitHub → https://github.com/markfredchen" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/markfredchen" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;markfredchen" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:346120@qq.com" title="E-Mail → mailto:346120@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:346120@qq.com" title="E-Mail → mailto:346120@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://weibo.com/markfredchen" title="Weibo → https://weibo.com/markfredchen" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+        <a href="https://weibo.com/markfredchen" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;markfredchen" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://instagram.com/markfred.chen" title="Instagram → https://instagram.com/markfred.chen" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+        <a href="https://instagram.com/markfred.chen" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;markfred.chen" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
       </span>
   </div>
 
@@ -878,7 +887,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Markfred Chen</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
@@ -898,9 +907,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/pisces.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
